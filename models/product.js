@@ -31,7 +31,7 @@ const productsSchema = mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required: false
+        required:true
     },
     countInStock: {
         type: Number,
