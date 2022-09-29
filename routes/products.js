@@ -5,13 +5,19 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 router.get(`/`, async (req, res) => {
-  const productList = await Product.find().populate('category');
+  // localhost:3000/api/v1/products?categories=2342342,234234
+    let filter = {};
+    if(req.query.categories)
+    {
+        filter = {category: req.query.categories.split(',')}
+    }
+    const productList = await Product.find(filter).populate('category');
   //const productList = await Product.find().select('name image -_id');
 
-  if(!productList) {
-    res.status(500).json({success: false})
-  }
-  res.send(productList);
+    if(!productList) {
+      res.status(500).json({success: false})
+    }
+    res.send(productList);
 })
 
 router.get(`/:id`, async (req, res) => {
@@ -93,7 +99,7 @@ router.delete('/:id', (req, res)=>{
 })
 
 router.get(`/get/count`, async (req, res) => {
-  const productCount = await Product.countDocuments()
+  const productCount = await Product.countDocuments() //{count: count}
 
   if(!productCount) {
     res.status(500).json({success: false})
